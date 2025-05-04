@@ -87,7 +87,7 @@ Explore fine-tuned Gemini on internal corpus
 
 | Role               | Name             | Responsibilities                                                                 |
 |--------------------|------------------|----------------------------------------------------------------------------------|
-| 🧠 **Fullstack Developer** | **Tran Minh Khang** | - Frontend Design<br>- Gemini API integration<br>- Semantic similarity model |
+| 🧠 **Fullstack Developer** | **Tran Minh Khang** | - Frontend/Backend Impl<br>- Gemini API integration<br>- Semantic similarity model |
 | 🎨 **Artist** | **Ha Thai Toan**   | - Chat UI/UX<br>
 | 🛠️ **Backend Developer** | **Le Hoang Viet**   | - RESTful API & routing<br>- Pipeline coordination    |
 
