@@ -53,7 +53,7 @@ The chatbot integrates Google Gemini for natural language conversations and a cu
   - Local Semantic Search Model (MODEL: vietnamese-embedding). (Link: https://huggingface.co/dangvantuan/vietnamese-embedding)
 
 ## Architecture Diagram ##
-  ![Architecture Diagram](../pictures/architecture.png)
+  ![Architecture Diagram](../pictures/architecture1.png)
 
 ---
 
