@@ -53,7 +53,7 @@ The chatbot integrates Google Gemini for natural language conversations and a cu
   - Local Semantic Search Model (MODEL: vietnamese-embedding). (Link: https://huggingface.co/dangvantuan/vietnamese-embedding)
 
 ## Architecture Diagram ##
-  ![Architecture Diagram](../pictures/architecture_diagram.png)
+  ![Architecture Diagram](../pictures/architecture.png)
 
 ---
 
@@ -72,14 +72,6 @@ Local similarity model was too naive on surface-level keywords.
 Data like "premium" or "children" were matched incorrectly.
 
 Confidence score did not correlate well with intent.
-
-## 💡 Lessons & Recommendations
-
-⚡️ Need real customer Q&A for training.
-
-✨ Add product descriptions (semantic-rich) to improve embedding.
-
-♻️ Use Gemini to rerank or reason instead of relying fully on vector score.
 
 ## ☑️ Next Improvements
 
