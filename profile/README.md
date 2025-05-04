@@ -1,13 +1,13 @@
-# 🛡️ AI Chatbot & CRM Tagging for Insurance
+# 🛡️ AI Chatbot News Buddy
 
 ## 📌 Overview
+This project is an AI-powered news reading assistant designed for both end-users and internal editorial teams of a digital news platform.
 
-This project is an **AI assistant platform for both end-users and internal teams** at a local insurance company.
+- For readers, it serves as a conversational news assistant, helping users discover and engage with personalized news articles based on their interests, reading history, and real-time queries.
 
-- For **customers**, it acts as a **conversational recommendation assistant**, helping them find the most suitable VHIS insurance plans based on personal needs.
-- For **internal marketing teams**, it builds a **CRM tagging pipeline** to classify user intents and enable behavioral analytics for future campaign retargeting.
+- For editorial and content teams, it powers a semantic tagging and user intent classification pipeline, enabling better content curation, audience segmentation, and data-driven content strategies.
 
-The chatbot leverages both **Google Gemini** for natural conversation and **a custom-trained local semantic similarity model** to ensure personalized and relevant plan suggestions.
+The chatbot integrates Google Gemini for natural language conversations and a custom fine-tuned semantic similarity model to ensure that article recommendations are context-aware, timely, and tailored to each reader’s preferences.
 
 ---
 
@@ -15,139 +15,47 @@ The chatbot leverages both **Google Gemini** for natural conversation and **a cu
 
 ### 1. 🔍 AI Chatbot (Main Feature)
 
-- Conversational interface to assist users in exploring VHIS insurance plans.
-- Gemini API integration (Google Generative Language) for natural replies.
-- Prompting logic trained with insurance plan metadata.
-- Semantic model to match user queries to most relevant plans.
+- Conversational interface that helps users explore and understand news content through chat.
+
+- Integrated with Gemini API (Google Generative Language) to provide natural, human-like replies.
+
+- Prompting logic is enhanced with metadata from news articles (e.g., topics, categories, timestamps).
+
+- Custom semantic similarity model aligns user queries with the most relevant news articles.
 
 ### 2. 🏷️ CRM Tagging Pipeline (Main Feature)
 
-- Uses internal semantic model to extract top matching tags.
-- Tracks frequency of tag usage per user.
-- Logs into MongoDB (`TagLog`) to build CRM profiles.
-- Top tag is inferred and matched against `insurance.json` to enrich CRM.
+- Utilizes an internal semantic model to extract key intent tags from user queries.
 
-### 3. 🔐 Authentication (Optional Feature)
+- Tracks tag frequency per user to build behavioral profiles.
 
-- Google Sign-in / Email login with session handling.
+- Logs interactions in MongoDB (TagLog) to support personalization and trend analysis.
 
-### 4. 💳 Insurance Browsing & Payment (Optional Feature)
-
-- Intergrated with Zalopay. 
-- View insurance package details.
-- Simulate deposit / transfer operations.
+- The most frequent tag is matched with a curated news dataset (news.json) to refine future article recommendations and audience segmentation.
 
 ---
 
 ## 🎯 Target Audience
 
-- Consumers looking for insurance products that match their personal needs.
-- Non-technical users who may require assistance from an AI-powered chatbot.
-- Customer advisors leveraging the system to recommend insurance plans and analyze customer behavior via the CRM. 
+- News readers seeking personalized, on-demand access to articles based on their interests and reading habits.
 
-### 📷 Use case Diagram
+- Non-technical users who prefer a conversational interface to explore news instead of navigating complex menus or categories.
 
-Below are some visual examples to better understand the use case and flow of the tool:
-
-**Chatbot Interface**  
-  ![Chatbot Interface](../pictures/system_usecase.png)
-
+- Editorial and content strategy teams using chatbot interaction logs and tag analytics to understand audience behavior and optimize content planning.
 
 ## 🏗️ Architecture
 
 - **Frontend**: React (ShadCN UI + TailwindCSS).
-- **Backend**: Node.js + Express + MongoDB.
+- **Backend**: Python (FastAPI).
+- **Database**: Milvus (Vector Database) + MongoDB
 - **AI Services**:
   - Google Gemini API.
-  - Local Semantic Search Model (MODEL: paraphrase-MiniLM-L6-v2).
+  - Local Semantic Search Model (MODEL: vietnamese-embedding). (Link: https://huggingface.co/dangvantuan/vietnamese-embedding)
 
 ## Architecture Diagram ##
   ![Architecture Diagram](../pictures/architecture_diagram.png)
 
-## Deployment Diagram ##  
-  ![Deployment Diagram](../pictures/deployment_diagram.png)
 ---
-
-## 📂 Folder Structure
-
-```
-├── model
-│   ├── chatModel.ts        # MongoDB schema for conversation history
-│   ├── tagLog.ts           # Logs tag frequencies and top tag for CRM
-├── service
-│   ├── chatService.ts      # Main logic combining Gemini + tag + DB
-│   ├── geminiService.ts    # Clean Gemini API abstraction
-│   ├── boxChatService.ts   # Calls to semantic tag model
-├── data
-│   └── insurance.json      # Raw plan data with name, type, features
-```
-
----
-
-## 🔍 Implementation Walkthrough
-
-### 🧪 Step 1: Semantic Matching with Local Model
-
-```ts
-const response = await axios.post('http://localhost:8000/sendMsg', {
-  text: userInput
-});
-const tags = response.data?.[0] || [];
-const ids = response.data?.[1] || [];
-```
-
-- ✅ **Purpose**: Extract semantically relevant insurance products from corpus.
-- ✅ **Output**: 
-  - A list of plan names (`tags`) with similarity scores.
-  - A list of product metadata (`ids`) to map recommended plans by index.
-
----
-
-### 🧠 Step 2: Gemini Prompting Flow
-
-```ts
-const prompt = buildPrompt(userInput, tags);
-// Includes top tag-based plan names
-// Ensures only natural language returned
-```
-
-- 🎯 Injects user query + tag-based suggestions.
-- 🔒 Restricts output to natural language, avoiding JSON/Markdown for better UX.
-
----
-
-### 🧾 Step 3: CRM Tag Logging Logic
-
-```ts
-await TagLog.create({
-  name: // name of insurance,
-  type: // ex: "Flexi Premium",
-  targetAudience: [ "VIP clients", "pre-existing conditions" ],
-  features: [ "Private room", "Full hospital expense coverage" ]
-});
-```
-
-- 📦 Stores most relevant tag per session for long-term trend tracking.
-- 📊 Enables analysis for future segmentation and retargeting.
-
----
-
-## Here are the flow user interact with our system: 
-Login pipeline
--   ![Login Diagram](../pictures/login_sequence.png)
-
---- 
-Payment pipeline
--   ![Payment Diagram](../pictures/payment_sequence.png)
-
----
-AI pipeline
--   ![AI Diagram](../pictures/ai_pipeline_sequence.png)
-
-
----
-
-### 🔬 Evaluation
 
 ## ✅ What Worked
 
@@ -181,27 +89,15 @@ Add customer intent classification
 
 Explore fine-tuned Gemini on internal corpus
 
-## 💰 Cost & Feasibility
-
-### Deployment
-
-- **Local hosting** Semantic model → Low infra cost.
-- **Gemini API** (Free tier or billing depending on usage).
-
-### Scaling Strategy
-
-- Add Redis for caching recent tag queries.
-- Migrate to cloud DB if internal use scales beyond expected.
-
 ---
 
 ## 👥 Team Members
 
 | Role               | Name             | Responsibilities                                                                 |
 |--------------------|------------------|----------------------------------------------------------------------------------|
-| 🧠 **AI Developer** | **Tran Minh Khang** | - Prompt engineering<br>- Gemini API integration<br>- Semantic similarity model |
-| 🎨 **Frontend Developer** | **Ly Vinh Thai**   | - Chat UI/UX<br>- Insurance plan viewer<br>- CRM tag visualization              |
-| 🛠️ **Backend Developer** | **Le Hoang Viet**   | - RESTful API & routing<br>- MongoDB schema design<br>- Pipeline coordination    |
+| 🧠 **Fullstack Developer** | **Tran Minh Khang** | - Frontend Design<br>- Gemini API integration<br>- Semantic similarity model |
+| 🎨 **Artist** | **Ha Thai Toan**   | - Chat UI/UX<br>
+| 🛠️ **Backend Developer** | **Le Hoang Viet**   | - RESTful API & routing<br>- Pipeline coordination    |
 
 ---
 
